@@ -28,7 +28,7 @@ import nukezam.mailtoyou.dao.JdbcUtil;
  */
 public class EmailToYou implements Runnable {
 	// 收件人邮箱（替换为自己知道的有效邮箱）
-	public static String[] receiveMailAccount = { "mazekun@outlook.com" };
+	public static String[] receiveMailAccount = { "mazekun@outlook.com" , "603313615@qq.com", "1157445336@qq.com"};
 	// 发件人的 邮箱 和 密码（替换为自己的邮箱和密码）
 	// PS: 某些邮箱服务器为了增加邮箱本身密码的安全性，给 SMTP 客户端设置了独立密码（有的邮箱称为“授权码”）,
 	// 对于开启了独立密码的邮箱, 这里的邮箱密码必需使用这个独立密码（授权码）。
@@ -136,7 +136,7 @@ public class EmailToYou implements Runnable {
 			message.setContent("Good Morning <br>" + commentFinal, "text/html;charset=UTF-8");
 		}
 		// 6. 设置发件时间
-		message.setSentDate(new Date());
+		message.setSentDate(new Date("Tue Jan 10 08:00:00 CST 2018"));
 
 		// 7. 保存设置
 		message.saveChanges();
