@@ -15,8 +15,8 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import nukezam.mailtoyou.Comments;
-import nukezam.mailtoyou.dao.JdbcUtil;
+import nukezam.mailtoyou.bean.Comments;
+import nukezam.mailtoyou.utils.JdbcUtil;
 
 /**
  * @Package :nukezam.mailtoyou.email
