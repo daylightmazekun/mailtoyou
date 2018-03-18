@@ -16,35 +16,36 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import nukezam.mailtoyou.bean.Comments;
+import nukezam.mailtoyou.bean.People;
 import nukezam.mailtoyou.utils.JdbcUtil;
 
-/**
- * @Package :nukezam.mailtoyou.email
- * @Title: EmailToYou.java
- * @Package nukezam.mailtoyou.email
- * @author zekun ma burmaing@gmail.com
- * @date 2018年1月8日 下午8:12:34
- * @version V1.0 , "603313615@qq.com", "1157445336@qq.com"
- */
 public class EmailToYou implements Runnable {
-	// 收件人邮箱（替换为自己知道的有效邮箱）
-	public static String[] receiveMailAccount = { "mazekun@outlook.com" , "603313615@qq.com", "1157445336@qq.com"};
-	// 发件人的 邮箱 和 密码（替换为自己的邮箱和密码）
-	// PS: 某些邮箱服务器为了增加邮箱本身密码的安全性，给 SMTP 客户端设置了独立密码（有的邮箱称为“授权码”）,
-	// 对于开启了独立密码的邮箱, 这里的邮箱密码必需使用这个独立密码（授权码）。
+	List<People> people = new ArrayList<People>();
+	// 收件人邮箱
+	public static String[] receiveMailAccount;
+
 	public static String myEmailAccount = "ma.zekun@qq.com";
 	public static String myEmailPassword = "ychthjmyopqlcahe";
 
-	// 发件人邮箱的 SMTP 服务器地址, 必须准确, 不同邮件服务器地址不同, 一般(只是一般, 绝非绝对)格式为: smtp.xxx.com
-	// 网易163邮箱的 SMTP 服务器地址为: smtp.163.com
+	EmailToYou emailToYou;
+	
+	public EmailToYou() {
+	}
+	
+	public EmailToYou(List<People> people) {
+		//EmailToYou emailToYou = new EmailToYou();
+		emailToYou = new EmailToYou();
+		this.people = people;
+	}
+
 	public static String myEmailSMTPHost = "smtp.qq.com";
 
-	public void postCommentToYou(String receiveMailAccount) throws Exception {
-		// 1. 创建参数配置, 用于连接邮件服务器的参数配置
-		Properties props = new Properties(); // 参数配置
-		props.setProperty("mail.transport.protocol", "smtp"); // 使用的协议（JavaMail规范要求）
-		props.setProperty("mail.smtp.host", myEmailSMTPHost); // 发件人的邮箱的 SMTP 服务器地址
-		props.setProperty("mail.smtp.auth", "true"); // 需要请求认证
+	public void postCommentToYou(People peopleReceiveMailAccount) throws Exception {
+
+		Properties props = new Properties(); 
+		props.setProperty("mail.transport.protocol", "smtp"); 
+		props.setProperty("mail.smtp.host", myEmailSMTPHost); 
+		props.setProperty("mail.smtp.auth", "true"); 
 
 		final String smtpPort = "465";
 		props.setProperty("mail.smtp.port", smtpPort);
@@ -52,22 +53,20 @@ public class EmailToYou implements Runnable {
 		props.setProperty("mail.smtp.socketFactory.fallback", "false");
 		props.setProperty("mail.smtp.socketFactory.port", smtpPort);
 
-		// 2. 根据配置创建会话对象, 用于和邮件服务器交互
+
 		Session session = Session.getInstance(props);
-		session.setDebug(true); // 设置为debug模式, 可以查看详细的发送 log
+		session.setDebug(true); 
 
-		// 3. 创建一封邮件
-		MimeMessage message = createMimeMessage(session, myEmailAccount, receiveMailAccount);
+		// 创建一封邮件
+		MimeMessage message = createMimeMessage(session, myEmailAccount, peopleReceiveMailAccount.getEmail());
 
-		// 4. 根据 Session 获取邮件传输对象
+		// 根据 Session 获取邮件传输对象
 		Transport transport = session.getTransport();
 
-		// 5. 使用 邮箱账号 和 密码 连接邮件服务器, 这里认证的邮箱必须与 message 中的发件人邮箱一致, 否则报错
-		// PS_03: 仔细看log, 认真看log, 看懂log, 错误原因都在log已说明。
+		// 使用 邮箱账号 和 密码 连接邮件服务器, 这里认证的邮箱必须与 message 中的发件人邮箱一致, 否则报错
 		transport.connect(myEmailAccount, myEmailPassword);
 
-		// 6. 发送邮件, 发到所有的收件地址, message.getAllRecipients() 获取到的是在创建邮件对象时添加的所有收件人, 抄送人,
-		// 密送人
+		// 6. 发送邮件
 		transport.sendMessage(message, message.getAllRecipients());
 
 		// 7. 关闭连接
@@ -87,17 +86,17 @@ public class EmailToYou implements Runnable {
 	 * @throws Exception
 	 */
 	public static MimeMessage createMimeMessage(Session session, String sendMail, String receiveMail) throws Exception {
-		// 1. 创建一封邮件
+		// 创建一封邮件
 		MimeMessage message = new MimeMessage(session);
 
-		// 2. From: 发件人（昵称有广告嫌疑，避免被邮件服务器误认为是滥发广告以至返回失败，请修改昵称）
+		// From: 发件人
 		message.setFrom(new InternetAddress(sendMail, "Nukezam", "UTF-8"));
 
-		// 3. To: 收件人（可以增加多个收件人、抄送、密送）
+		// To: 收件人
 		message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(receiveMail, " ", "UTF-8"));
 
-		// 4. Subject: 邮件主题（标题有广告嫌疑，避免被邮件服务器误认为是滥发广告以至返回失败，请修改标题）
-		message.setSubject("Morning", "UTF-8");
+		// Subject: 邮件主题
+		message.setSubject("雯妃晚上好", "UTF-8");
 		// JdbcUtil
 		JdbcUtil jdbcUtil = new JdbcUtil();
 		Connection conn = jdbcUtil.getConnection();
@@ -115,7 +114,7 @@ public class EmailToYou implements Runnable {
 			comments.setComments(rs.getString("comments"));
 			comments.setDetails(rs.getString("details"));
 		}
-		// 5. Content: 邮件正文（可以使用html标签）（内容有广告嫌疑，避免被邮件服务器误认为是滥发广告以至返回失败，请修改发送内容）
+		// Content: 邮件正文（可以使用html标签）
 
 		if (comments == null || comments.getComments().isEmpty()) {
 			message.setContent("Today is only Good Morning" + "<br>" + "      ---Daylighemazekun",
@@ -133,12 +132,12 @@ public class EmailToYou implements Runnable {
 			}
 			commentFinal = commentFinal + "<br><br>" + "<p>     ----Form" + comments.getArtistName() + "  "
 					+ comments.getMusicName() + "</p>";
-			message.setContent("Good Morning <br>" + commentFinal, "text/html;charset=UTF-8");
+			message.setContent("祝小仙女晚上好 说实话 推送的那首歌 我也不知道 <br>" + commentFinal, "text/html;charset=UTF-8");
 		}
-		// 6. 设置发件时间
-		message.setSentDate(new Date("Tue Jan 10 08:00:00 CST 2018"));
+		// 设置发件时间
+		message.setSentDate(new Date());
 
-		// 7. 保存设置
+		// 保存设置
 		message.saveChanges();
 
 		return message;
@@ -150,13 +149,11 @@ public class EmailToYou implements Runnable {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
-		EmailToYou emailToYou = new EmailToYou();
 		try {
-			for (int i = 0; i < receiveMailAccount.length; i++) {
-				emailToYou.postCommentToYou(receiveMailAccount[i]);
+			for (int i = 0; i < people.size(); i++) {
+				emailToYou.postCommentToYou(people.get(i));
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -26,23 +26,18 @@ public class JdbcUtil {
     private static Connection conn=null;  //声明数据库连接对象  
       
     //静态代码块负责加载驱动  
-    static   
-    {  
-        try  
-        {  
+    static{  
+        try{  
             Class.forName(driver);  
         }  
-        catch(Exception ex)  
-        {  
+        catch(Exception ex){  
             ex.printStackTrace();  
         }  
     }  
       
     //单例模式返回数据库连接对象，供外部调用  
-    public static Connection getConnection() throws Exception  
-    {  
-        if(conn==null)  
-        {  
+    public static Connection getConnection() throws Exception{  
+        if(conn==null){  
             conn = DriverManager.getConnection(url, username, password); //连接数据库  
             return conn;  
         }  
@@ -56,20 +51,16 @@ public class JdbcUtil {
     //写main方法测试是否连接成功，可将本类运行为Java程序先进行测试，再做后续的数据库操作。  
     public static void main(String[] args) {  
           
-        try  
-        {  
+        try{  
            Connection conn = JdbcUtil.getConnection();  
-           if(conn!=null)  
-           {  
+           if(conn!=null){  
                System.out.println("数据库连接正常！");  
            }  
-           else  
-           {  
+           else{  
                System.out.println("数据库连接异常！");  
            }  
         }  
-        catch(Exception ex)  
-        {  
+        catch(Exception ex){  
             ex.printStackTrace();  
         }  
           

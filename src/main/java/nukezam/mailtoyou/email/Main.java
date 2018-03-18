@@ -1,5 +1,10 @@
 package nukezam.mailtoyou.email;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import nukezam.mailtoyou.bean.People;
+
 /** 
 * @Package :nukezam.mailtoyou.email
 * @Title: Main.java 
@@ -10,12 +15,16 @@ package nukezam.mailtoyou.email;
 */
 public class Main {
 public static void main(String[] args) {
-	EmailToYou emailToYou= new EmailToYou();
+	List<People> ListPeople = new ArrayList<People>();
+	People people = new People();
+	people.setEmail("burmaing@gmail.com");
+	ListPeople.add(people);
+	EmailToYou emailToYou= new EmailToYou(ListPeople);
 	emailToYou.run();
-	try {
-		emailToYou.wait(1000);
-	} catch (InterruptedException e) {
-		e.printStackTrace();
-	}
+//	try {
+//		emailToYou.wait(1000);
+//	} catch (InterruptedException e) {
+//		e.printStackTrace();
+//	}
 }
 }
