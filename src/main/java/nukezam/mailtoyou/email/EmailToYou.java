@@ -17,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 
 import nukezam.mailtoyou.bean.Comments;
 import nukezam.mailtoyou.bean.People;
+import nukezam.mailtoyou.dao.impl.GetCommentsImpl;
 import nukezam.mailtoyou.utils.JdbcUtil;
 
 public class EmailToYou implements Runnable {
@@ -96,24 +97,11 @@ public class EmailToYou implements Runnable {
 		message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(receiveMail, " ", "UTF-8"));
 
 		// Subject: 邮件主题
-		message.setSubject("雯妃晚上好", "UTF-8");
-		// JdbcUtil
-		JdbcUtil jdbcUtil = new JdbcUtil();
-		Connection conn = jdbcUtil.getConnection();
-		String sql = "SELECT * FROM comments order by rand() limit 1";
-		List<Comments> commentsList = new ArrayList<Comments>();
-		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery(sql);
+		message.setSubject("你有病啊你起这么早", "UTF-8");
+		// Dao
+		GetCommentsImpl getCommentsImpl = new GetCommentsImpl();
 		Comments comments = new Comments();
-		String[] ss = null;
-		while (rs.next()) {
-			comments.setId(rs.getInt("id"));
-			comments.setMusicName(rs.getString("music_name"));
-			comments.setArtistName(rs.getString("artist_name"));
-			ss = rs.getString("details").split("\n\n");
-			comments.setComments(rs.getString("comments"));
-			comments.setDetails(rs.getString("details"));
-		}
+		comments = getCommentsImpl.getComments();
 		// Content: 邮件正文（可以使用html标签）
 
 		if (comments == null || comments.getComments().isEmpty()) {
@@ -123,31 +111,28 @@ public class EmailToYou implements Runnable {
 			String commentFinal = " ";
 			Pattern pattern = Pattern.compile("\\d+$");
 
-			for (int i = 0; i < ss.length; i++) {
-				Matcher matcher = pattern.matcher(ss[i]);
+			for (int i = 0; i < comments.getDetails().length; i++) {
+				Matcher matcher = pattern.matcher(comments.getDetails()[i]);
 				if (matcher.find()) {
-					ss[i] = ss[i].replace(matcher.group(), "");
+					comments.getDetails()[i] = comments.getDetails()[i].replace(matcher.group(), "");
 				}
-				commentFinal = commentFinal + ss[i] + "<br>" + "<br>";
+				commentFinal = commentFinal + comments.getDetails()[i] + "<br>" + "<br>";
 			}
-			commentFinal = commentFinal + "<br><br>" + "<p>     ----Form" + comments.getArtistName() + "  "
-					+ comments.getMusicName() + "</p>";
-			message.setContent("祝小仙女晚上好 说实话 推送的那首歌 我也不知道 <br>" + commentFinal, "text/html;charset=UTF-8");
+			message.setContent("早，:) 今天推送:<br>" + "<br>" + "<p>     ----Form" + comments.getArtistName() + "  "
+					+ comments.getMusicName() + "</p>"+ commentFinal, "text/html;charset=UTF-8");
 		}
 		// 设置发件时间
 		message.setSentDate(new Date());
 
 		// 保存设置
 		message.saveChanges();
-
+		getCommentsImpl.insertOtherComments(comments);
+		getCommentsImpl.deleteComments(comments);
+		// 我不知道为社么啊 mysql不让我改设置 我能这么办 我很绝望
+		// JdbcUtil.connClose(getCommentsImpl);
 		return message;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Runnable#run()
-	 */
 	public void run() {
 		try {
 			for (int i = 0; i < people.size(); i++) {

@@ -14,7 +14,7 @@ public interface GetComments {
 	
 	public abstract Comments getComments();
 
-	public abstract void deleteComments();
+	public abstract void deleteComments(Comments comments);
 
 	public abstract void insertOtherComments(Comments comments);
 }

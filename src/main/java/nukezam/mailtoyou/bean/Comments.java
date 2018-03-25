@@ -13,7 +13,7 @@ public class Comments {
 	private String musicName;
 	private String artistName;
 	private String comments;
-	private String details;
+	private String[] details;
 
 	public Integer getId() {
 		return id;
@@ -47,11 +47,11 @@ public class Comments {
 		this.comments = comments;
 	}
 
-	public String getDetails() {
+	public String[] getDetails() {
 		return details;
 	}
 
-	public void setDetails(String details) {
+	public void setDetails(String[] details) {
 		this.details = details;
 	}
 

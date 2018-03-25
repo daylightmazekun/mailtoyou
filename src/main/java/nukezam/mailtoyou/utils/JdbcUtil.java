@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import nukezam.mailtoyou.dao.impl.GetCommentsImpl;
+
 /** 
 * @Package :nukezam.mailtoyou.dao
 * @Title: JdbcUtil.java 
@@ -43,10 +45,10 @@ public class JdbcUtil {
         }  
         return conn;  
     }  
-    public static void connClose(Connection connection, PreparedStatement preparedStatement, ResultSet resultSet) throws SQLException {
-    	if (connection != null) connection.close();
-    	if (preparedStatement != null) preparedStatement.close();
-    	if (resultSet != null) resultSet.close();
+    public static void connClose(GetCommentsImpl getCommentsImpl) throws SQLException {
+    	if (getCommentsImpl.getConnection() != null) getCommentsImpl.getConnection().close();
+    	if (getCommentsImpl.getPreparedStatement() != null) getCommentsImpl.getPreparedStatement().close();
+    	if (getCommentsImpl.getResultSet() != null) getCommentsImpl.getResultSet().close();
     }
     //写main方法测试是否连接成功，可将本类运行为Java程序先进行测试，再做后续的数据库操作。  
     public static void main(String[] args) {  
