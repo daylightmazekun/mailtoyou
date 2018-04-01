@@ -13,7 +13,7 @@ public class App {
 	public static void main(String[] args) {
 		ArrayList<People> ListPeople = new ArrayList<People>();
 		People people = new People();
-		people.setEmail("1871884578@qq.com");
+		people.setEmail("burmaing@gmail.com");
 		ListPeople.add(people);
 		EmailToYou emailToYou = new EmailToYou(ListPeople);
 //		for (;;) {

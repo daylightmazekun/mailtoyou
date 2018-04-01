@@ -26,70 +26,21 @@ import nukezam.mailtoyou.bean.WeatherEntity;
 * @version V1.0   
 */
 public class JsonToEntity {
-	public Object jsonToEntity(){
+//	public static void main(String[] args) throws Exception {
+//		JsonToEntity jsonToEntity = new JsonToEntity();
+//		jsonToEntity.jsonToEntity();
+//	}
+	public WeatherEntity jsonToEntity() throws Exception{
 
     	ObjectMapper mapper = new ObjectMapper(); 
-
+    	WeatherEntity weatherEntity = null;
     	try {
     			
-    		//POJO to JSON
-//			mapper.writeValue(new File("article.json"), createArticle());
-//			System.out.println("json created!");
-
+    		WeatherUtil weatherUtil = new WeatherUtil();
 			//JSON to POJO
-    		WeatherEntity article = mapper.readValue(new File("article.json"), WeatherEntity.class);
+    		 weatherEntity = mapper.readValue(weatherUtil.getWeather(), WeatherEntity.class);
 
-			//"Raw" Data Binding Example
-			Map<String,Object> articleMap = mapper.readValue(new File("article.json"), Map.class);
-
-			System.out.println(article);
-
-			System.out.println(articleMap);
-
-			//Data binding Collection<E>
-			List<WeatherEntity> articles = new LinkedList<WeatherEntity>();
-
-//			articles.add(createArticle());
-//			articles.add(createArticle());
-
-			mapper.writeValue(new File("articles.json"), articles);
-			
-			//( 1 ) Collection<Map>
-			List result = mapper.readValue(new File("articles.json"), List.class);
-			System.out.println(result.get(0).getClass());
-			System.out.println(result);
-
-			//( 2 ) Collection<Artilce>
-			result = mapper.readValue(new File("articles.json"), new TypeReference<List<WeatherEntity>>() { });
-			System.out.println(result.get(0).getClass());
-			System.out.println(result);
-			
-			System.out.println("---------------------------------------------------------");
-			//Tree
-			ObjectNode objectRoot = (ObjectNode) mapper.readTree(new File("article.json"));
-			Iterator<String> fields = objectRoot.fieldNames();
-			String field = "";
-			while(fields.hasNext()){
-				field = fields.next();
-				System.out.println("field: "+field);
-			}
-			System.out.println("---------------------------------------------------------");
-
-			ArrayNode arrayRoot = (ArrayNode) mapper.readTree(new File("articles.json"));
-
-			Iterator<JsonNode> elements = arrayRoot.elements();
-			JsonNode element;
-
-			while(elements.hasNext()){
-				element = elements.next();				
-				fields = element.fieldNames();
-				field = "";
-				while(fields.hasNext()){
-					field = fields.next();
-					System.out.println("field: "+field);
-				}
-
-			}
+			System.out.println(weatherEntity.toString());
 
     	} catch (JsonGenerationException e) {
 			e.printStackTrace();
@@ -98,20 +49,6 @@ public class JsonToEntity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return mapper;
+		return weatherEntity;
     }
-
-//    private static Article createArticle(){
-//
-//    	Article article = new Article();
-//
-//    	article.setTitle("Jackson - Java to JSON & JSON to Java");
-//    	article.setUrl("http://hmkcode.com/jackson-java-json");
-//    	article.addCategory("Java");
-//    	article.addTag("Java");
-//    	article.addTag("Jackson");
-//    	article.addTag("JSON");
-//
-//    	return article;
-//    }
 }

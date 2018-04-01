@@ -1,8 +1,6 @@
 package nukezam.mailtoyou.email;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,8 +15,9 @@ import javax.mail.internet.MimeMessage;
 
 import nukezam.mailtoyou.bean.Comments;
 import nukezam.mailtoyou.bean.People;
+import nukezam.mailtoyou.bean.WeatherEntity;
 import nukezam.mailtoyou.dao.impl.GetCommentsImpl;
-import nukezam.mailtoyou.utils.JdbcUtil;
+import nukezam.mailtoyou.utils.JsonToEntity;
 
 public class EmailToYou implements Runnable {
 	List<People> people = new ArrayList<People>();
@@ -26,15 +25,15 @@ public class EmailToYou implements Runnable {
 	public static String[] receiveMailAccount;
 
 	public static String myEmailAccount = "ma.zekun@qq.com";
-	public static String myEmailPassword = "ychthjmyopqlcahe";
+	public static String myEmailPassword = "vvvvvvv";
 
 	EmailToYou emailToYou;
-	
+
 	public EmailToYou() {
 	}
-	
+
 	public EmailToYou(List<People> people) {
-		//EmailToYou emailToYou = new EmailToYou();
+		// EmailToYou emailToYou = new EmailToYou();
 		emailToYou = new EmailToYou();
 		this.people = people;
 	}
@@ -43,10 +42,10 @@ public class EmailToYou implements Runnable {
 
 	public void postCommentToYou(People peopleReceiveMailAccount) throws Exception {
 
-		Properties props = new Properties(); 
-		props.setProperty("mail.transport.protocol", "smtp"); 
-		props.setProperty("mail.smtp.host", myEmailSMTPHost); 
-		props.setProperty("mail.smtp.auth", "true"); 
+		Properties props = new Properties();
+		props.setProperty("mail.transport.protocol", "smtp");
+		props.setProperty("mail.smtp.host", myEmailSMTPHost);
+		props.setProperty("mail.smtp.auth", "true");
 
 		final String smtpPort = "465";
 		props.setProperty("mail.smtp.port", smtpPort);
@@ -54,9 +53,8 @@ public class EmailToYou implements Runnable {
 		props.setProperty("mail.smtp.socketFactory.fallback", "false");
 		props.setProperty("mail.smtp.socketFactory.port", smtpPort);
 
-
 		Session session = Session.getInstance(props);
-		session.setDebug(true); 
+		session.setDebug(true);
 
 		// 创建一封邮件
 		MimeMessage message = createMimeMessage(session, myEmailAccount, peopleReceiveMailAccount.getEmail());
@@ -97,13 +95,14 @@ public class EmailToYou implements Runnable {
 		message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(receiveMail, " ", "UTF-8"));
 
 		// Subject: 邮件主题
-		message.setSubject("你有病啊你起这么早", "UTF-8");
+		message.setSubject("ohayo", "UTF-8");
 		// Dao
 		GetCommentsImpl getCommentsImpl = new GetCommentsImpl();
 		Comments comments = new Comments();
 		comments = getCommentsImpl.getComments();
 		// Content: 邮件正文（可以使用html标签）
-
+		JsonToEntity jsonToEntity = new JsonToEntity();
+		WeatherEntity weatherEntity = jsonToEntity.jsonToEntity();
 		if (comments == null || comments.getComments().isEmpty()) {
 			message.setContent("Today is only Good Morning" + "<br>" + "      ---Daylighemazekun",
 					"text/html;charset=UTF-8");
@@ -118,8 +117,15 @@ public class EmailToYou implements Runnable {
 				}
 				commentFinal = commentFinal + comments.getDetails()[i] + "<br>" + "<br>";
 			}
-			message.setContent("早，:) 今天推送:<br>" + "<br>" + "<p>     ----Form" + comments.getArtistName() + "  "
-					+ comments.getMusicName() + "</p>"+ commentFinal, "text/html;charset=UTF-8");
+			SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
+			message.setContent("早，:)" + "<br>" + " 今天是：" + dateFormater.format(weatherEntity.getResult().get(0).getDays())
+					+ "<br>" + weatherEntity.getResult().get(0).getCitynm() + "<br>" + "今天天气: "
+					+ weatherEntity.getResult().get(0).getWeather() + "<br>" + "气温: "
+					+ weatherEntity.getResult().get(0).getTemperature() + "<br>" + "最高温度: "
+					+ weatherEntity.getResult().get(0).getTemp_high() + "<br>" + "最高低温度: "
+					+ weatherEntity.getResult().get(0).getTemp_low() + "<br>" + "<br>" + "今天推送的歌曲来自:<br>" + "<br>"
+					+ "<p>     ----" + comments.getArtistName() + "  " + comments.getMusicName() + "</p>"
+					+ commentFinal, "text/html;charset=UTF-8");
 		}
 		// 设置发件时间
 		message.setSentDate(new Date());
