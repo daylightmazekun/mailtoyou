@@ -17,32 +17,32 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import nukezam.mailtoyou.bean.WeatherEntity;
 
-/** 
-* @Package :nukezam.mailtoyou.utils
-* @Title: JsonToEntity.java 
-* @Package nukezam.mailtoyou.utils 
-* @author zekun ma burmaing@gmail.com   
-* @date 2018年3月31日 下午9:15:02 
-* @version V1.0   
-*/
+/**
+ * @Package :nukezam.mailtoyou.utils
+ * @Title: JsonToEntity.java
+ * @Package nukezam.mailtoyou.utils
+ * @author zekun ma burmaing@gmail.com
+ * @date 2018年3月31日 下午9:15:02
+ * @version V1.0
+ */
 public class JsonToEntity {
-//	public static void main(String[] args) throws Exception {
-//		JsonToEntity jsonToEntity = new JsonToEntity();
-//		jsonToEntity.jsonToEntity();
-//	}
-	public WeatherEntity jsonToEntity() throws Exception{
+	// public static void main(String[] args) throws Exception {
+	// JsonToEntity jsonToEntity = new JsonToEntity();
+	// jsonToEntity.jsonToEntity();
+	// }
+	public WeatherEntity jsonToEntity() throws Exception {
 
-    	ObjectMapper mapper = new ObjectMapper(); 
-    	WeatherEntity weatherEntity = null;
-    	try {
-    			
-    		WeatherUtil weatherUtil = new WeatherUtil();
-			//JSON to POJO
-    		 weatherEntity = mapper.readValue(weatherUtil.getWeather(), WeatherEntity.class);
+		ObjectMapper mapper = new ObjectMapper();
+		WeatherEntity weatherEntity = null;
+		try {
+
+			WeatherUtil weatherUtil = new WeatherUtil();
+			// JSON to POJO
+			weatherEntity = mapper.readValue(weatherUtil.getWeather(), WeatherEntity.class);
 
 			System.out.println(weatherEntity.toString());
 
-    	} catch (JsonGenerationException e) {
+		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
@@ -50,5 +50,5 @@ public class JsonToEntity {
 			e.printStackTrace();
 		}
 		return weatherEntity;
-    }
+	}
 }

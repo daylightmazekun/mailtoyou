@@ -23,7 +23,7 @@ public class GetCommentsImpl implements GetComments {
 	PreparedStatement preparedStatement;
 	ResultSet resultSet;
 	Comments comments;
-	
+
 	public GetCommentsImpl() {
 		try {
 			this.connection = JdbcUtil.getConnection();
@@ -64,10 +64,10 @@ public class GetCommentsImpl implements GetComments {
 		String sql = EmailToYouConstants.DELETE_SQL;
 		int i = 0;
 		try {
-			//connection = JdbcUtil.getConnection();
+			// connection = JdbcUtil.getConnection();
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement = (PreparedStatement) connection.prepareStatement(sql);
-	    	preparedStatement.setInt(1, comments.getId());
+			preparedStatement.setInt(1, comments.getId());
 			i = preparedStatement.executeUpdate();
 			System.out.println("resutl: " + i);
 		} catch (Exception e) {
@@ -75,27 +75,26 @@ public class GetCommentsImpl implements GetComments {
 		}
 	}
 
-
 	public void insertOtherComments(Comments comments) {
 		StringBuffer stringBuffer = new StringBuffer();
-		for(int i = 0; i < comments.getDetails().length;i++){
-			stringBuffer.append(comments.getDetails()[i]+"\n");
+		for (int i = 0; i < comments.getDetails().length; i++) {
+			stringBuffer.append(comments.getDetails()[i] + "\n");
 		}
 
 		String s = stringBuffer.toString();
-	    int i = 0;
-	    try {
+		int i = 0;
+		try {
 			// connection = JdbcUtil.getConnection();
-	    	preparedStatement = (PreparedStatement) connection.prepareStatement(EmailToYouConstants.INSERT_SQL);
-	    	preparedStatement.setInt(1, comments.getId());
-	    	preparedStatement.setString(2, comments.getMusicName());
-	    	preparedStatement.setString(3, comments.getArtistName());
-	    	preparedStatement.setString(4, comments.getComments());
-	    	preparedStatement.setString(5, s);
-	        i = preparedStatement.executeUpdate();
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
+			preparedStatement = (PreparedStatement) connection.prepareStatement(EmailToYouConstants.INSERT_SQL);
+			preparedStatement.setInt(1, comments.getId());
+			preparedStatement.setString(2, comments.getMusicName());
+			preparedStatement.setString(3, comments.getArtistName());
+			preparedStatement.setString(4, comments.getComments());
+			preparedStatement.setString(5, s);
+			i = preparedStatement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Connection getConnection() {

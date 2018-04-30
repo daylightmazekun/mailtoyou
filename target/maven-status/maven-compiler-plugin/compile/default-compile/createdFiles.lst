@@ -1,0 +1,12 @@
+nukezam\mailtoyou\bean\Comments.class
+nukezam\mailtoyou\dao\impl\GetCommentsImpl.class
+nukezam\mailtoyou\utils\JdbcUtil.class
+nukezam\mailtoyou\App.class
+nukezam\mailtoyou\dao\GetComments.class
+nukezam\mailtoyou\bean\Result.class
+nukezam\mailtoyou\utils\JsonToEntity.class
+nukezam\mailtoyou\bean\WeatherEntity.class
+nukezam\mailtoyou\constants\EmailToYouConstants.class
+nukezam\mailtoyou\email\EmailToYou.class
+nukezam\mailtoyou\utils\WeatherUtil.class
+nukezam\mailtoyou\bean\People.class

@@ -25,7 +25,7 @@ public class EmailToYou implements Runnable {
 	public static String[] receiveMailAccount;
 
 	public static String myEmailAccount = "ma.zekun@qq.com";
-	public static String myEmailPassword = "vvvvvvv";
+	public static String myEmailPassword = "jpuhlamxoqcgbidi";
 
 	EmailToYou emailToYou;
 
@@ -95,7 +95,7 @@ public class EmailToYou implements Runnable {
 		message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(receiveMail, " ", "UTF-8"));
 
 		// Subject: 邮件主题
-		message.setSubject("ohayo", "UTF-8");
+		message.setSubject("中午好", "UTF-8");
 		// Dao
 		GetCommentsImpl getCommentsImpl = new GetCommentsImpl();
 		Comments comments = new Comments();
@@ -118,14 +118,16 @@ public class EmailToYou implements Runnable {
 				commentFinal = commentFinal + comments.getDetails()[i] + "<br>" + "<br>";
 			}
 			SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd");
-			message.setContent("早，:)" + "<br>" + " 今天是：" + dateFormater.format(weatherEntity.getResult().get(0).getDays())
-					+ "<br>" + weatherEntity.getResult().get(0).getCitynm() + "<br>" + "今天天气: "
-					+ weatherEntity.getResult().get(0).getWeather() + "<br>" + "气温: "
-					+ weatherEntity.getResult().get(0).getTemperature() + "<br>" + "最高温度: "
-					+ weatherEntity.getResult().get(0).getTemp_high() + "<br>" + "最高低温度: "
-					+ weatherEntity.getResult().get(0).getTemp_low() + "<br>" + "<br>" + "今天推送的歌曲来自:<br>" + "<br>"
-					+ "<p>     ----" + comments.getArtistName() + "  " + comments.getMusicName() + "</p>"
-					+ commentFinal, "text/html;charset=UTF-8");
+			message.setContent(
+					"早，:)" + "<br>" + " 今天是：" + weatherEntity.getResult().get(0).getDays() + "<br>"
+							+ weatherEntity.getResult().get(0).getCitynm() + "<br>" + "今天天气: "
+							+ weatherEntity.getResult().get(0).getWeather() + "<br>" + "气温: "
+							+ weatherEntity.getResult().get(0).getTemperature() + "<br>" + "最高温度: "
+							+ weatherEntity.getResult().get(0).getTemp_high() + "<br>" + "最高低温度: "
+							+ weatherEntity.getResult().get(0).getTemp_low() + "<br>" + "<br>" + "今天推送的歌曲来自:<br>"
+							+ "<br>" + "<p>     ----" + comments.getArtistName() + "  " + comments.getMusicName()
+							+ "</p>" + commentFinal,
+					"text/html;charset=UTF-8");
 		}
 		// 设置发件时间
 		message.setSentDate(new Date());

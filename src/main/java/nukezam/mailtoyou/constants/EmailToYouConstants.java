@@ -15,10 +15,11 @@ public class EmailToYouConstants {
 	public final static String DELETE_SQL = "DELETE FROM COMMENTS WHERE ID = ?";
 	// 插入另一个表
 	public final static String INSERT_SQL = "INSERT INTO `wangyi2`.`comments2`(`id`,`MUSIC_NAME`,`ARTIST_NAME`,`COMMENTS`,`DETAILS`) VALUES (?, ?, ?, ?, ?)";
-//			"(<{id: }>,\r\n" + 
-//			"<{MUSIC_NAME: }>,\r\n" + 
-//			"<{ARTIST_NAME: }>,\r\n" + 
-//			"<{COMMENTS: }>,\r\n" + 
-//			"<{DETAILS: }>);"
-			//"INSERT COMMENTS2 SET(ID, MUSIC_NAME, ARTIST_NAME, COMMENTS, DETAILS) = (?, ?, ?, ?, ?)";
+	// "(<{id: }>,\r\n" +
+	// "<{MUSIC_NAME: }>,\r\n" +
+	// "<{ARTIST_NAME: }>,\r\n" +
+	// "<{COMMENTS: }>,\r\n" +
+	// "<{DETAILS: }>);"
+	// "INSERT COMMENTS2 SET(ID, MUSIC_NAME, ARTIST_NAME, COMMENTS, DETAILS) = (?,
+	// ?, ?, ?, ?)";
 }

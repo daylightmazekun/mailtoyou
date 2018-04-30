@@ -11,7 +11,7 @@ import nukezam.mailtoyou.bean.Comments;
  * @version V1.0
  */
 public interface GetComments {
-	
+
 	public abstract Comments getComments();
 
 	public abstract void deleteComments(Comments comments);
