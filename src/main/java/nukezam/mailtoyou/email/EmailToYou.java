@@ -25,7 +25,7 @@ public class EmailToYou implements Runnable {
 	public static String[] receiveMailAccount;
 
 	public static String myEmailAccount = "ma.zekun@qq.com";
-	public static String myEmailPassword = "jpuhlamxoqcgbidi";
+	public static String myEmailPassword = "qqqqqqqq";
 
 	EmailToYou emailToYou;
 
